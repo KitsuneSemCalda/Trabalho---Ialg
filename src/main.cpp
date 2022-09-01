@@ -14,8 +14,8 @@ struct Medicamentos{
 /*
 Funcao Vazia Cadastro que gera os valores para serem cadastrados no registro Medicamentos 
 */
-void Cadastro(int *TamVetor, int *VecMed[]){
-    for (int i = 0; i != *TamVetor; i++){
+void Cadastro(int TamVetor, Medicamentos VecMed[]){
+    for (int i = 0; i != TamVetor; i++){
         cout << "------------------------------------------------" << endl;
         cout << "Digite o nome do Produto: ";
         
@@ -79,7 +79,7 @@ void listar(){
 	
 	
 }
-void menu(){
+void menu(int TamVetor, Medicamentos VecMed[]){
     int Option = 0;
         while (Option != 8){
         cout << "------------------------------------------------" << endl;
@@ -90,7 +90,7 @@ void menu(){
         cin >> Option;
         switch (Option){
             case 1:
-                Cadastro();
+                Cadastro(TamVetor, VecMed);
                 break;
         }
     }
@@ -100,13 +100,13 @@ int main(){
 	
  // Gerando um ponteiro cujo tamanho inicial comece com 3 para criar o vetor de registro
     int *TamVetor;
-    int TamVetor = new int;
+    TamVetor = new int;
     *TamVetor = 3;
 
     //Gerando um registro do tipo Medicamentos para o vetor
     Medicamentos VecMed[*TamVetor];
 
 
-    menu(*TamVetor, *VecMed);
+    menu(*TamVetor, VecMed);
     return 0;
 }
