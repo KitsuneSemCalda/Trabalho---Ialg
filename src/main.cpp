@@ -75,8 +75,19 @@ void consultar(){
 /*
 função pra listar medicamentos
 */ 
-void listar(){
-	
+void listar(int TamVetor, Medicamentos VecMed[]){
+	//mostra uma lista meio porca mas ta bao, dps melhoramos
+	for (int i = 0; i != TamVetor; i++){
+		cout<<"Produto Numero:"<<" "<<i<<endl;
+        cout <<"Nome do Medicamento:"<<" "<<VecMed[i].NomeMedicamento << endl <<"Descrição do Medicamento:"<<" "<<VecMed[i].Descricao << endl;
+        cout <<"Nome do Laboratório:"<<" "<<VecMed[i].Laboratorio << endl <<"Código do Medicamento:"<<" "<<VecMed[i].CodigoIndentificacao << endl;
+        cout<<"Quantidade Restante:"<<" "<< VecMed[i].QuantidadeDisponivel << endl;
+        if(VecMed[i].SituacaoProduto==true)
+        cout<<"Situação do Medicamento:"<<" "<<"Ativo"<<endl;
+        else{
+		cout<<"Situação do Medicamento:"<<" "<<"Inativo"<<endl<<endl;
+		}
+    }
 	
 }
 void menu(int TamVetor, Medicamentos VecMed[]){
@@ -92,6 +103,10 @@ void menu(int TamVetor, Medicamentos VecMed[]){
             case 1:
                 Cadastro(TamVetor, VecMed);
                 break;
+             case 3:
+                listar(TamVetor, VecMed);
+                break;
+       
         }
     }
 }
