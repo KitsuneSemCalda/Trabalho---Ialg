@@ -18,6 +18,7 @@ medicamentos
 */
 
 void Cadastro(int TamVetor, Medicamentos VecMed[]) {
+  string Response;
   for (int i = 0; i != TamVetor; i++) {
     cout << "------------------------------------------------" << endl;
     cout << "Digite o nome do Produto: ";
@@ -60,6 +61,12 @@ void Cadastro(int TamVetor, Medicamentos VecMed[]) {
       VecMed[i].SituacaoProduto = false;
     }
     cout << "Cadastro Efetuado com Sucesso!\n";
+  }
+  cout << "Você deseja cadastrar mais 3 produtos: ";
+  getline(cin >> ws, Response);
+  if (Response == "sim") {
+    int NewTamVetor = *&TamVetor += 3;
+    Cadastro(NewTamVetor, VecMed);
   }
 }
 /*
