@@ -17,9 +17,13 @@ Funcao nula Cadastro que gera os valores para serem cadastrados no registro
 medicamentos
 */
 
-void Cadastro(int TamVetor, Medicamentos VecMed[]) {
+void Cadastro(int *TamVetor, Medicamentos VecMed[]) {
+  int vezesRodado = 0;
   string Response;
-  for (int i = 0; i != TamVetor; i++) {
+  bool moreRegister;
+  for (int i = 0; i != *TamVetor; i++) {
+    i += vezesRodado;
+    cout << i << endl;
     cout << "------------------------------------------------" << endl;
     cout << "Digite o nome do Produto: ";
 
@@ -62,11 +66,23 @@ void Cadastro(int TamVetor, Medicamentos VecMed[]) {
     }
     cout << "Cadastro Efetuado com Sucesso!\n";
   }
+  moreRegister = false;
+
+  if (moreRegister == 0) {
+    cout << "deve parar a execução" << endl;
+  } else {
+    cout << "deve continuar a execução" << endl;
+  }
+
   cout << "Você deseja cadastrar mais 3 produtos: ";
   getline(cin >> ws, Response);
   if (Response == "sim") {
-    int NewTamVetor = *&TamVetor += 3;
-    Cadastro(NewTamVetor, VecMed);
+    moreRegister = true;
+  }
+  if (moreRegister == true) {
+    *TamVetor += 3;
+    vezesRodado++;
+    Cadastro(*&TamVetor, VecMed);
   }
 }
 /*
@@ -76,10 +92,10 @@ void Consultar() {}
 /*
 função pra listar medicamentos
 */
-void Listar(int TamVetor, Medicamentos VecMed[]) {
+void Listar(int *TamVetor, Medicamentos VecMed[]) {
   // mostra uma lista meio porca mas ta bao, dps melhoramos
   cout << "------------------------------------------------" << endl;
-  for (int i = 0; i != TamVetor; i++) {
+  for (int i = 0; i != *TamVetor; i++) {
     cout << "Produto Numero:"
          << " " << i << endl;
     cout << "Nome do Medicamento:"
@@ -118,10 +134,10 @@ void Menu(int TamVetor, Medicamentos VecMed[]) {
     cin >> Option;
     switch (Option) {
     case 1:
-      Cadastro(TamVetor, VecMed);
+      Cadastro(&TamVetor, VecMed);
       break;
     case 3:
-      Listar(TamVetor, VecMed);
+      Listar(&TamVetor, VecMed);
       break;
     }
   }
