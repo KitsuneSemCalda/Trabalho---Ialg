@@ -99,6 +99,7 @@ int i = itensCadastrados;
 /*
     Adicionando uma função simples de menu
 */
+<<<<<<< HEAD
 //função para ordernar os produtos;
 void ordernar(int &TamVetor, Medicamentos* VecMed){
 	string pivo = VecMed[TamVetor].CodigoIndentificacao;
@@ -144,6 +145,33 @@ void Consultar(int &TamVetor, Medicamentos* VecMed, int &itensCadastrados) {
 	}
 	*/
 	
+=======
+void Consultar(int *TamVetor, Medicamentos VecMed[]) {
+  string codigoproduto;
+  cout << "Insira o nome do medicamento desejado:"
+       << " " << endl;
+  cin >> codigoproduto;
+  for (int i = 0; i != *TamVetor; i++) {
+    if (codigoproduto == VecMed[i].NomeMedicamento) {
+      cout << "Código do produto:"
+           << " " << VecMed[i].NomeMedicamento << endl;
+      cout << "Quantidade em estoque:"
+           << " " << VecMed[i].QuantidadeDisponivel << endl;
+      cout << "Preço unitário:"
+           << " " << VecMed[i].PrecoUnitario << endl;
+      if (VecMed[i].SituacaoProduto == true) {
+        cout << "Situação:"
+             << " "
+             << "Ativo" << endl;
+      } else {
+        cout << "Situação:"
+             << " "
+             << "Inativo" << endl
+             << endl;
+      }
+    }
+  }
+>>>>>>> 636f868 (realizing a merge)
 }
 /*
 função pra listar medicamentos
@@ -166,13 +194,12 @@ void Listar(int &TamVetor, Medicamentos* VecMed, int &itensCadastrados) {
          << " " << VecMed[i].QuantidadeDisponivel << endl;
     cout << "Preço unitário:"
          << " " << VecMed[i].PrecoUnitario << endl;
-               
+
     if (VecMed[i].SituacaoProduto == true) {
       cout << "Situação do Medicamento:"
            << " "
            << "Ativo" << endl;
-    }
-    else {
+    } else {
       cout << "Situação do Medicamento:"
            << " "
            << "Inativo" << endl
