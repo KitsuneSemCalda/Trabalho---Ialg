@@ -74,7 +74,7 @@ void Cadastro(int *TamVetor, Medicamentos VecMed[]) {
     cout << "deve continuar a execução" << endl;
   }
 
-  cout << "Você deseja cadastrar mais 3 produtos: ";
+  cout << "Você deseja cadastrar mais 3 produtos?: ";
   getline(cin >> ws, Response);
   if (Response == "sim") {
     moreRegister = true;
@@ -88,7 +88,30 @@ void Cadastro(int *TamVetor, Medicamentos VecMed[]) {
 /*
     Adicionando uma função simples de menu
 */
-void Consultar() {}
+void Consultar(int *TamVetor, Medicamentos VecMed[]) {
+	string codigoproduto;
+	cout<<"Insira o nome do medicamento desejado:"<<" "<<endl;
+	cin>>codigoproduto;
+	for (int i = 0; i != *TamVetor; i++) {
+		if(codigoproduto==VecMed[i].NomeMedicamento){
+			cout<<"Código do produto:"<<" "<<VecMed[i].NomeMedicamento<<endl;
+			cout<<"Quantidade em estoque:"<<" "<<VecMed[i].QuantidadeDisponivel<<endl;
+			cout<<"Preço unitário:"<<" "<<VecMed[i].PrecoUnitario<<endl;
+			if (VecMed[i].SituacaoProduto == true){
+			cout << "Situação:"
+			<< " "
+			<< "Ativo" << endl;
+			}
+			else {
+			cout << "Situação:"
+			<< " "
+			<< "Inativo" << endl
+			<< endl;
+			}
+		}
+	
+	}
+}
 /*
 função pra listar medicamentos
 */
@@ -108,10 +131,14 @@ void Listar(int *TamVetor, Medicamentos VecMed[]) {
          << " " << VecMed[i].CodigoIndentificacao << endl;
     cout << "Quantidade Restante:"
          << " " << VecMed[i].QuantidadeDisponivel << endl;
-    if (VecMed[i].SituacaoProduto == true)
+    cout << "Preço unitário:"
+         << " " << VecMed[i].PrecoUnitario << endl;
+               
+    if (VecMed[i].SituacaoProduto == true) {
       cout << "Situação do Medicamento:"
            << " "
            << "Ativo" << endl;
+    }
     else {
       cout << "Situação do Medicamento:"
            << " "
@@ -135,6 +162,9 @@ void Menu(int TamVetor, Medicamentos VecMed[]) {
     switch (Option) {
     case 1:
       Cadastro(&TamVetor, VecMed);
+      break;
+    case 2:
+      Consultar(&TamVetor, VecMed);
       break;
     case 3:
       Listar(&TamVetor, VecMed);
