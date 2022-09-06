@@ -99,12 +99,32 @@ int i = itensCadastrados;
 /*
     Adicionando uma função simples de menu
 */
+//função para ordernar os produtos;
+void ordernar(int &TamVetor, Medicamentos* VecMed){
+	string pivo = VecMed[TamVetor].CodigoIndentificacao;
+   string j = p;
+   string k;
+   for (k = p; k < r; k++) {
+      if (v[k] <= pivo) {
+         swap(v[j],v[k]);
+         j++; 
+      } 
+   }
+   swap(v[j],v[r]);
+   return j; 
+}
+//função de busca binaria
+void BuscaBi(int &TamVetor, Medicamentos* VecMed, int &itensCadastrados) {
+
+}
+
+//função de consulta dos remédios
 void Consultar(int &TamVetor, Medicamentos* VecMed, int &itensCadastrados) {
-	string codigoproduto;
-	cout<<"Insira o nome do produto desejado:"<<" "<<endl;
+/*	string codigoproduto;
+	cout<<"Insira o código do produto desejado:"<<" "<<endl;
 	cin>>codigoproduto;
 	for (int i = 0; i < itensCadastrados; i++) {
-		if(codigoproduto==VecMed[i].NomeMedicamento){
+		if(codigoproduto==VecMed[i].CodigoIndentificacao){
 			cout<<"Código do produto:"<<" "<<VecMed[i].NomeMedicamento<<endl;
 			cout<<"Quantidade em estoque:"<<" "<<VecMed[i].QuantidadeDisponivel<<endl;
 			cout<<"Preço unitário:"<<" "<<VecMed[i].PrecoUnitario<<endl;
@@ -122,6 +142,8 @@ void Consultar(int &TamVetor, Medicamentos* VecMed, int &itensCadastrados) {
 		}
 	
 	}
+	*/
+	
 }
 /*
 função pra listar medicamentos
