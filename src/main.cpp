@@ -90,10 +90,10 @@ void Cadastro(int *TamVetor, Medicamentos VecMed[]) {
 */
 void Consultar(int *TamVetor, Medicamentos VecMed[]) {
 	string codigoproduto;
-	cout<<"Insira o código de indentificação do produto:"<<" "<<endl;
+	cout<<"Insira o nome do produto desejado:"<<" "<<endl;
 	cin>>codigoproduto;
 	for (int i = 0; i != *TamVetor; i++) {
-		if(codigoproduto==VecMed[i].CodigoIndentificacao){
+		if(codigoproduto==VecMed[i].NomeMedicamento){
 			cout<<"Código do produto:"<<" "<<VecMed[i].NomeMedicamento<<endl;
 			cout<<"Quantidade em estoque:"<<" "<<VecMed[i].QuantidadeDisponivel<<endl;
 			cout<<"Preço unitário:"<<" "<<VecMed[i].PrecoUnitario<<endl;
