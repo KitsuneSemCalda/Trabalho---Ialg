@@ -17,166 +17,199 @@ struct Medicamentos {
 Funcao nula Cadastro que gera os valores para serem cadastrados no registro
 medicamentos
 */
-
-Medicamentos* realocar(int &TamVetor, Medicamentos* VecMed, int itensCadastrados) {
-	Medicamentos* aux = new Medicamentos[TamVetor + 3];
-	
-	//memcpy(aux, VecMed, sizeof(Medicamentos)*TamVetor);
-	
-	for (int i = 0; i < itensCadastrados; i++) {
-		aux[i].NomeMedicamento = VecMed[i].NomeMedicamento;
-		aux[i].Descricao = VecMed[i].Descricao;
-		aux[i].Laboratorio = VecMed[i].Laboratorio;
-		aux[i].CodigoIndentificacao = VecMed[i].CodigoIndentificacao;
-		aux[i].QuantidadeDisponivel = VecMed[i].QuantidadeDisponivel;
-		aux[i].PrecoUnitario = VecMed[i].PrecoUnitario;
-		aux[i].SituacaoProduto = VecMed[i].SituacaoProduto;
-	}
-	
-	delete[] VecMed;
-	VecMed = aux;
-	aux = nullptr;
-	
-	TamVetor += 3;
-	
-	return VecMed;
+int particiona(Medicamentos *v, int c, int f) { // c = começo, f = fim
+  string pivo = v[c].CodigoIndentificacao;
+  Medicamentos aux = v[c];
+  int i = c + 1, j = f;
+  while (i <= j) {
+    if (v[i].CodigoIndentificacao <= pivo)
+      i++;
+    else if (pivo <= v[j].CodigoIndentificacao)
+      j--;
+    else { // (v[i] > pivo) e (v[j] < pivo)
+      swap(v[i], v[j]);
+      i++;
+      j--;
+    }
+  } // agora i == j+1
+  v[c] = v[j];
+  v[j] = aux;
+  return j; // retorna posição do pivô
 }
 
-Medicamentos* Cadastro(int &TamVetor, Medicamentos* VecMed, int &itensCadastrados) {
-int i = itensCadastrados;
-	cout << "------------------------------------------------" << endl;
-	cout << "Digite o nome do Produto: ";
+void quicksort(Medicamentos *a, int pos_pivo, int fim) {
+  int pos_novo_pivo;
+  if (pos_pivo < fim) {
+    pos_novo_pivo = particiona(a, pos_pivo, fim);
+    quicksort(a, pos_pivo, pos_novo_pivo - 1);
+    quicksort(a, pos_novo_pivo + 1, fim);
+  }
+}
 
-	string NomeMed;
-	cin.ignore();
-	getline(cin, NomeMed);
-	VecMed[i].NomeMedicamento = NomeMed;
+int BuscaBinaria(Medicamentos *V, int pos_inicial, int pos_final, string K) {
+  int meio = (pos_inicial + pos_final) / 2;
 
-	cout << "Digite uma descrição do Produto: ";
-	string Description;
-	getline(cin, Description);
-	VecMed[i].Descricao = Description;
+  if (K == V[meio].CodigoIndentificacao) { // caso base: elemento encontrado
+    return meio;
+  } else if (pos_inicial < pos_final) { // caso geral: processo de busca
+    if (V[meio].CodigoIndentificacao < K)
+      return BuscaBinaria(V, meio + 1, pos_final, K);
+    else
+      return BuscaBinaria(V, pos_inicial, meio - 1, K);
+  } else { // caso base: elemento não encontrada
+    return -1;
+  }
+}
 
-	cout << "Digite o Laborátorio que criou o produto: ";
-	string Labor;
-	getline(cin, Labor);
-	VecMed[i].Laboratorio = Labor;
+void Consultar(Medicamentos *VecMed, int tam) {
 
-	cout << "Digite o código de identificação do produto: ";
-	string CodInd;
-	getline(cin, CodInd);
-	VecMed[i].CodigoIndentificacao = CodInd;
+  string codigoBusca;
+  cout << "Digite o código do produto que deseja buscar: ";
+  cin >> codigoBusca;
 
-	cout << "Digite o tamanho do estoque deste produto: ";
-	int EstoqueDisponivel;
-	cin >> EstoqueDisponivel;
-	VecMed[i].QuantidadeDisponivel = EstoqueDisponivel;
+  int posicao = BuscaBinaria(VecMed, 0, tam - 1, codigoBusca);
 
-	cout << "Digite o preço Unitário do produto: ";
-	float PrecoUnitario;
-	cin >> PrecoUnitario;
-	VecMed[i].PrecoUnitario = PrecoUnitario;
+  if (posicao == -1) {
 
-	cout << "Digite o status do produto: ";
-	string StatusProduto;
-	cin >> StatusProduto;
-	if (StatusProduto == "Ativo") {
-	  VecMed[i].SituacaoProduto = true;
-	} else if (StatusProduto == "Inativo") {
-	  VecMed[i].SituacaoProduto = false;
-	}
-	itensCadastrados++;
-	cout << "Cadastro Efetuado com Sucesso!\n";
-	
-	//ordenar(tamVetor, VecMed); IMPLEMENTAR FUNÇÃO
-	
-	if (itensCadastrados == TamVetor) {
-		cout << "entrou";
-		VecMed = realocar(TamVetor, VecMed, itensCadastrados);
-	}
-	return VecMed;
+    cout << "Produto não encontrado." << endl;
+  }
+
+  else {
+
+    cout << "Código do produto:"
+         << " " << VecMed[posicao].NomeMedicamento << endl;
+    cout << "Quantidade em estoque:"
+         << " " << VecMed[posicao].QuantidadeDisponivel << endl;
+    cout << "Preço unitário:"
+         << " " << VecMed[posicao].PrecoUnitario << endl;
+
+    if (VecMed[posicao].SituacaoProduto == true) {
+      cout << "Situação:"
+           << " "
+           << "Ativo" << endl;
+    }
+
+    else {
+      cout << "Situação:"
+           << " "
+           << "Inativo" << endl
+           << endl;
+    }
+  }
+}
+
+Medicamentos *realocar(int &TamVetor, Medicamentos *VecMed,
+                       int itensCadastrados) {
+  Medicamentos *aux = new Medicamentos[TamVetor + 3];
+
+  // memcpy(aux, VecMed, sizeof(Medicamentos)*TamVetor);
+
+  for (int i = 0; i < itensCadastrados; i++) {
+    aux[i].NomeMedicamento = VecMed[i].NomeMedicamento;
+    aux[i].Descricao = VecMed[i].Descricao;
+    aux[i].Laboratorio = VecMed[i].Laboratorio;
+    aux[i].CodigoIndentificacao = VecMed[i].CodigoIndentificacao;
+    aux[i].QuantidadeDisponivel = VecMed[i].QuantidadeDisponivel;
+    aux[i].PrecoUnitario = VecMed[i].PrecoUnitario;
+    aux[i].SituacaoProduto = VecMed[i].SituacaoProduto;
+  }
+
+  delete[] VecMed;
+  VecMed = aux;
+  aux = nullptr;
+
+  TamVetor += 3;
+
+  return VecMed;
+}
+
+Medicamentos *Cadastro(int &TamVetor, Medicamentos *VecMed,
+                       int &itensCadastrados) {
+  int i = itensCadastrados;
+  cout << "------------------------------------------------" << endl;
+  cout << "Digite o nome do Produto: ";
+
+  string NomeMed;
+  cin.ignore();
+  getline(cin, NomeMed);
+  VecMed[i].NomeMedicamento = NomeMed;
+
+  cout << "Digite uma descrição do Produto: ";
+  string Description;
+  getline(cin, Description);
+  VecMed[i].Descricao = Description;
+
+  cout << "Digite o Laborátorio que criou o produto: ";
+  string Labor;
+  getline(cin, Labor);
+  VecMed[i].Laboratorio = Labor;
+
+  cout << "Digite o código de identificação do produto: ";
+  string CodInd;
+  getline(cin, CodInd);
+  VecMed[i].CodigoIndentificacao = CodInd;
+
+  cout << "Digite o tamanho do estoque deste produto: ";
+  int EstoqueDisponivel;
+  cin >> EstoqueDisponivel;
+  VecMed[i].QuantidadeDisponivel = EstoqueDisponivel;
+
+  cout << "Digite o preço Unitário do produto: ";
+  float PrecoUnitario;
+  cin >> PrecoUnitario;
+  VecMed[i].PrecoUnitario = PrecoUnitario;
+
+  cout << "Digite o status do produto: ";
+  string StatusProduto;
+  cin >> StatusProduto;
+  if (StatusProduto == "Ativo") {
+    VecMed[i].SituacaoProduto = true;
+  } else if (StatusProduto == "Inativo") {
+    VecMed[i].SituacaoProduto = false;
+  }
+  itensCadastrados++;
+  cout << "Cadastro Efetuado com Sucesso!\n";
+
+  // ordenar(tamVetor, VecMed); IMPLEMENTAR FUNÇÃO
+  quicksort(VecMed, 0, itensCadastrados - 1);
+
+  if (itensCadastrados == TamVetor) {
+    cout << "entrou";
+    VecMed = realocar(TamVetor, VecMed, itensCadastrados);
+  }
+  return VecMed;
 }
 /*
     Adicionando uma função simples de menu
 */
-<<<<<<< HEAD
-//função para ordernar os produtos;
-void ordernar(int &TamVetor, Medicamentos* VecMed){
-	string pivo = VecMed[TamVetor].CodigoIndentificacao;
-   string j = p;
-   string k;
-   for (k = p; k < r; k++) {
-      if (v[k] <= pivo) {
-         swap(v[j],v[k]);
-         j++; 
-      } 
-   }
-   swap(v[j],v[r]);
-   return j; 
-}
-//função de busca binaria
-void BuscaBi(int &TamVetor, Medicamentos* VecMed, int &itensCadastrados) {
+/*void Consultar(int &TamVetor, Medicamentos* VecMed, int &itensCadastrados) {
+        string codigoproduto;
+        cout<<"Insira o nome do produto desejado:"<<" "<<endl;
+        cin>>codigoproduto;
+        for (int i = 0; i < itensCadastrados; i++) {
+                if(codigoproduto==VecMed[i].NomeMedicamento){
+                        cout<<"Código do produto:"<<"
+"<<VecMed[i].NomeMedicamento<<endl; cout<<"Quantidade em estoque:"<<"
+"<<VecMed[i].QuantidadeDisponivel<<endl; cout<<"Preço unitário:"<<"
+"<<VecMed[i].PrecoUnitario<<endl; if (VecMed[i].SituacaoProduto == true){ cout
+<< "Situação:"
+                        << " "
+                        << "Ativo" << endl;
+                        }
+                        else {
+                        cout << "Situação:"
+                        << " "
+                        << "Inativo" << endl
+                        << endl;
+                        }
+                }
 
+        }
 }
-
-//função de consulta dos remédios
-void Consultar(int &TamVetor, Medicamentos* VecMed, int &itensCadastrados) {
-/*	string codigoproduto;
-	cout<<"Insira o código do produto desejado:"<<" "<<endl;
-	cin>>codigoproduto;
-	for (int i = 0; i < itensCadastrados; i++) {
-		if(codigoproduto==VecMed[i].CodigoIndentificacao){
-			cout<<"Código do produto:"<<" "<<VecMed[i].NomeMedicamento<<endl;
-			cout<<"Quantidade em estoque:"<<" "<<VecMed[i].QuantidadeDisponivel<<endl;
-			cout<<"Preço unitário:"<<" "<<VecMed[i].PrecoUnitario<<endl;
-			if (VecMed[i].SituacaoProduto == true){
-			cout << "Situação:"
-			<< " "
-			<< "Ativo" << endl;
-			}
-			else {
-			cout << "Situação:"
-			<< " "
-			<< "Inativo" << endl
-			<< endl;
-			}
-		}
-	
-	}
-	*/
-	
-=======
-void Consultar(int *TamVetor, Medicamentos VecMed[]) {
-  string codigoproduto;
-  cout << "Insira o nome do medicamento desejado:"
-       << " " << endl;
-  cin >> codigoproduto;
-  for (int i = 0; i != *TamVetor; i++) {
-    if (codigoproduto == VecMed[i].NomeMedicamento) {
-      cout << "Código do produto:"
-           << " " << VecMed[i].NomeMedicamento << endl;
-      cout << "Quantidade em estoque:"
-           << " " << VecMed[i].QuantidadeDisponivel << endl;
-      cout << "Preço unitário:"
-           << " " << VecMed[i].PrecoUnitario << endl;
-      if (VecMed[i].SituacaoProduto == true) {
-        cout << "Situação:"
-             << " "
-             << "Ativo" << endl;
-      } else {
-        cout << "Situação:"
-             << " "
-             << "Inativo" << endl
-             << endl;
-      }
-    }
-  }
->>>>>>> 636f868 (realizing a merge)
-}
-/*
-função pra listar medicamentos
 */
-void Listar(int &TamVetor, Medicamentos* VecMed, int &itensCadastrados) {
+// função pra listar medicamentos
+
+void Listar(int &TamVetor, Medicamentos *VecMed, int &itensCadastrados) {
   // mostra uma lista meio porca mas ta bao, dps melhoramos
   cout << "------------------------------------------------" << endl;
   for (int i = 0; i < itensCadastrados; i++) {
@@ -208,7 +241,7 @@ void Listar(int &TamVetor, Medicamentos* VecMed, int &itensCadastrados) {
     cout << "------------------------------------------------" << endl;
   }
 }
-void Menu(int &TamVetor, Medicamentos* VecMed, int &itensCadastrados) {
+void Menu(int &TamVetor, Medicamentos *VecMed, int &itensCadastrados) {
   int Option = 0;
   while (Option != 8) {
     cout << "------------------------------------------------" << endl;
@@ -224,7 +257,7 @@ void Menu(int &TamVetor, Medicamentos* VecMed, int &itensCadastrados) {
       VecMed = Cadastro(TamVetor, VecMed, itensCadastrados);
       break;
     case 2:
-      Consultar(TamVetor, VecMed, itensCadastrados);
+      Consultar(VecMed, itensCadastrados);
       break;
     case 3:
       Listar(TamVetor, VecMed, itensCadastrados);
@@ -241,7 +274,7 @@ int main() {
   int itensCadastrados = 0;
 
   // Gerando um registro do tipo Medicamentos para o vetor
-  Medicamentos* VecMed = new Medicamentos[TamVetor];
+  Medicamentos *VecMed = new Medicamentos[TamVetor];
 
   Menu(TamVetor, VecMed, itensCadastrados);
   return 0;
