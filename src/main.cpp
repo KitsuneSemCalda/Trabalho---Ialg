@@ -98,6 +98,34 @@ void Consultar(Medicamentos *VecMed, int tam) {
   }
 }
 
+//função para excluir medicamento
+void excluir(Medicamentos *VecMed, int tam) {
+
+  string codigoBusca;
+  cout << "Digite o código do produto que deseja exluir: ";
+  cin >> codigoBusca;
+
+  int posicao = BuscaBinaria(VecMed, 0, tam - 1, codigoBusca);
+
+  if (posicao == -1) {
+
+    cout << "Produto não encontrado." << endl;
+  }
+  
+  else if (VecMed[posicao].SituacaoProduto == true) {
+     
+      cout << "Produto exluído com sucesso"<<endl;
+      VecMed[posicao].SituacaoProduto = false;
+
+  }
+
+  else {
+     
+      cout << "Produto já exluído"<<endl;
+  }
+}
+
+
 Medicamentos *realocar(int &TamVetor, Medicamentos *VecMed,
                        int itensCadastrados) {
   Medicamentos *aux = new Medicamentos[TamVetor + 3];
@@ -179,36 +207,8 @@ Medicamentos *Cadastro(int &TamVetor, Medicamentos *VecMed,
   }
   return VecMed;
 }
-/*
-    Adicionando uma função simples de menu
-*/
-/*void Consultar(int &TamVetor, Medicamentos* VecMed, int &itensCadastrados) {
-        string codigoproduto;
-        cout<<"Insira o nome do produto desejado:"<<" "<<endl;
-        cin>>codigoproduto;
-        for (int i = 0; i < itensCadastrados; i++) {
-                if(codigoproduto==VecMed[i].NomeMedicamento){
-                        cout<<"Código do produto:"<<"
-"<<VecMed[i].NomeMedicamento<<endl; cout<<"Quantidade em estoque:"<<"
-"<<VecMed[i].QuantidadeDisponivel<<endl; cout<<"Preço unitário:"<<"
-"<<VecMed[i].PrecoUnitario<<endl; if (VecMed[i].SituacaoProduto == true){ cout
-<< "Situação:"
-                        << " "
-                        << "Ativo" << endl;
-                        }
-                        else {
-                        cout << "Situação:"
-                        << " "
-                        << "Inativo" << endl
-                        << endl;
-                        }
-                }
 
-        }
-}
-*/
 // função pra listar medicamentos
-
 void Listar(int &TamVetor, Medicamentos *VecMed, int &itensCadastrados) {
   // mostra uma lista meio porca mas ta bao, dps melhoramos
   cout << "------------------------------------------------" << endl;
@@ -241,6 +241,8 @@ void Listar(int &TamVetor, Medicamentos *VecMed, int &itensCadastrados) {
     cout << "------------------------------------------------" << endl;
   }
 }
+
+//função do menu principal
 void Menu(int &TamVetor, Medicamentos *VecMed, int &itensCadastrados) {
   int Option = 0;
   while (Option != 8) {
@@ -261,6 +263,9 @@ void Menu(int &TamVetor, Medicamentos *VecMed, int &itensCadastrados) {
       break;
     case 3:
       Listar(TamVetor, VecMed, itensCadastrados);
+      break;
+    case 4:
+      excluir(VecMed, itensCadastrados);
       break;
     }
   }
