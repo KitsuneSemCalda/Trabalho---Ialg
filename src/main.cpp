@@ -102,6 +102,7 @@ void Consultar(Medicamentos *VecMed, int tam) {
 void excluir(Medicamentos *VecMed, int tam) {
 
   string codigoBusca;
+  int confirmacao;
   cout << "Digite o código do produto que deseja exluir: ";
   cin >> codigoBusca;
 
@@ -113,10 +114,15 @@ void excluir(Medicamentos *VecMed, int tam) {
   }
   
   else if (VecMed[posicao].SituacaoProduto == true) {
-     
-      cout << "Produto exluído com sucesso"<<endl;
-      VecMed[posicao].SituacaoProduto = false;
-
+     cout<<"Confirma exclusão? 1-sim 2-não"<<endl;
+		cin >> confirmacao;
+		if(confirmacao==1){
+		 cout << "Produto exluído com sucesso"<<endl;
+		 VecMed[posicao].SituacaoProduto = false;
+		}
+		else{
+			cout<<"Exclusão cancelada";
+		}	
   }
 
   else {
