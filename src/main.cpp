@@ -176,7 +176,7 @@ Medicamentos *realocar(int &TamVetor, Medicamentos *VecMed,
 }
 
 Medicamentos *Cadastro(int &TamVetor, Medicamentos *VecMed,
-                       int itensCadastrados) {
+                       int &itensCadastrados) {
   int i = itensCadastrados;
   cout << "------------------------------------------------" << endl;
   cout << "Digite o nome do Produto: ";
@@ -226,8 +226,6 @@ Medicamentos *Cadastro(int &TamVetor, Medicamentos *VecMed,
 
 // função pra listar medicamentos
 void Listar(int &TamVetor, Medicamentos *VecMed, int &itensCadastrados) {
-  // mostra uma lista meio porca mas ta bao, dps melhoramos
-  quicksort(VecMed, 0, itensCadastrados);
   cout << "------------------------------------------------" << endl;
   for (int i = 0; i < itensCadastrados; i++) {
     cout << "Produto Numero:"
@@ -261,6 +259,7 @@ void Listar(int &TamVetor, Medicamentos *VecMed, int &itensCadastrados) {
 
 // função do menu principal
 void Menu(int &TamVetor, Medicamentos *VecMed, int &itensCadastrados) {
+  quicksort(VecMed, 0, itensCadastrados);
   int Option = 0;
   while (Option != 8) {
     cout << "------------------------------------------------" << endl;
