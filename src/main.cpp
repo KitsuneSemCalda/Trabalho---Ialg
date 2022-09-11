@@ -1,3 +1,7 @@
+/*
+Nome do Aluno: Arthur Augusto Magalhães ------------- Matricula: 202110830
+*/
+
 #include <cstring>
 #include <fstream>
 #include <iostream>
@@ -5,10 +9,10 @@
 using namespace std;
 
 struct Medicamentos {
-  string NomeMedicamento;
-  string Descricao;
-  string Laboratorio;
-  string CodigoIndentificacao;
+  char NomeMedicamento[50];
+  char Descricao[100];
+  char Laboratorio[100];
+  char CodigoIndentificacao[100];
   int QuantidadeDisponivel;
   float PrecoUnitario;
   bool SituacaoProduto;
@@ -174,29 +178,28 @@ Medicamentos *Cadastro(int &TamVetor, Medicamentos *VecMed,
   int i = itensCadastrados;
   cout << "------------------------------------------------" << endl;
   cout << "Digite o nome do Produto: ";
-
-  cin.ignore();
   cin >> VecMed[i].NomeMedicamento;
+  cin.ignore(' ', '\n');
 
   cout << "Digite uma descrição do Produto: ";
-  cin.ignore();
   cin >> VecMed[i].Descricao;
+  cin.ignore(' ', '\n');
 
   cout << "Digite o Laborátorio que criou o produto: ";
-  cin.ignore();
   cin >> VecMed[i].Laboratorio;
+  cin.ignore(' ', '\n');
 
   cout << "Digite o código de identificação do produto: ";
-  cin.ignore();
   cin >> VecMed[i].CodigoIndentificacao;
+  cin.ignore(' ', '\n');
 
   cout << "Digite o tamanho do estoque deste produto: ";
-  cin.ignore();
   cin >> VecMed[i].QuantidadeDisponivel;
+  cin.ignore(' ', '\n');
 
   cout << "Digite o preço Unitário do produto: ";
-  cin.ignore();
   cin >> VecMed[i].PrecoUnitario;
+  cin.ignore(' ', '\n');
 
   cout << "Digite o status do produto: ";
   string StatusProduto;
