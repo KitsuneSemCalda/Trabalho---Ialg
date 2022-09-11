@@ -282,6 +282,12 @@ void Menu(int &TamVetor, Medicamentos *VecMed, int &itensCadastrados) {
     case 4:
       excluir(VecMed, itensCadastrados);
       break;
+    case 5:
+      // efetuarVenda()
+      break;
+    case 6:
+      // listarDadosdoEstoque()
+      break;
     case 7:
       exportar(VecMed, TamVetor, itensCadastrados);
       break;
