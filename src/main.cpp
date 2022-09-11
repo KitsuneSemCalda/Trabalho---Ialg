@@ -225,6 +225,7 @@ Medicamentos *Cadastro(int &TamVetor, Medicamentos *VecMed,
 // função pra listar medicamentos
 void Listar(int &TamVetor, Medicamentos *VecMed, int &itensCadastrados) {
   // mostra uma lista meio porca mas ta bao, dps melhoramos
+  quicksort(VecMed, 0, itensCadastrados);
   cout << "------------------------------------------------" << endl;
   for (int i = 0; i < itensCadastrados; i++) {
     cout << "Produto Numero:"
