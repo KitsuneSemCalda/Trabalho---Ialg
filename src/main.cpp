@@ -1,5 +1,6 @@
+#include <cstring>
+#include <fstream>
 #include <iostream>
-#include <string>
 
 using namespace std;
 
@@ -12,6 +13,19 @@ struct Medicamentos {
   float PrecoUnitario;
   bool SituacaoProduto;
 };
+
+/*Funcão Exportar */
+
+void exportar(Medicamentos *v, int TamVetor, int &quantidadeItens) {
+  fstream dadosMedicamento;
+  dadosMedicamento.open("dadosMedicamento.bin",
+                        ios::out | ios::trunc | ios::binary | ios::in);
+  for (int i = 0; i < TamVetor; i++) {
+    Medicamentos aux = v[i];
+    dadosMedicamento.write(reinterpret_cast<char *>(&aux), sizeof(aux));
+  }
+  cout << "Dados exportados com sucesso" << endl;
+}
 
 /*
 Funcao nula Cadastro que gera os valores para serem cadastrados no registro
@@ -98,7 +112,7 @@ void Consultar(Medicamentos *VecMed, int tam) {
   }
 }
 
-//função para excluir medicamento
+// função para excluir medicamento
 void excluir(Medicamentos *VecMed, int tam) {
 
   string codigoBusca;
@@ -112,32 +126,30 @@ void excluir(Medicamentos *VecMed, int tam) {
 
     cout << "Produto não encontrado." << endl;
   }
-  
+
   else if (VecMed[posicao].SituacaoProduto == true) {
-     cout<<"Confirma exclusão? 1-sim 2-não"<<endl;
-		cin >> confirmacao;
-		if(confirmacao==1){
-		 cout << "Produto exluído com sucesso"<<endl;
-		 VecMed[posicao].SituacaoProduto = false;
-		}
-		else{
-			cout<<"Exclusão cancelada";
-		}	
+    cout << "Confirma exclusão? 1-sim 2-não" << endl;
+    cin >> confirmacao;
+    if (confirmacao == 1) {
+      cout << "Produto exluído com sucesso" << endl;
+      VecMed[posicao].SituacaoProduto = false;
+    } else {
+      cout << "Exclusão cancelada";
+    }
   }
 
   else {
-     
-      cout << "Produto já exluído"<<endl;
+
+    cout << "Produto já exluído" << endl;
   }
 }
-
 
 Medicamentos *realocar(int &TamVetor, Medicamentos *VecMed,
                        int itensCadastrados) {
   Medicamentos *aux = new Medicamentos[TamVetor + 3];
 
-  // memcpy(aux, VecMed, sizeof(Medicamentos)*TamVetor);
-
+  memcpy(aux, VecMed, sizeof(Medicamentos) * TamVetor);
+  /*
   for (int i = 0; i < itensCadastrados; i++) {
     aux[i].NomeMedicamento = VecMed[i].NomeMedicamento;
     aux[i].Descricao = VecMed[i].Descricao;
@@ -147,7 +159,7 @@ Medicamentos *realocar(int &TamVetor, Medicamentos *VecMed,
     aux[i].PrecoUnitario = VecMed[i].PrecoUnitario;
     aux[i].SituacaoProduto = VecMed[i].SituacaoProduto;
   }
-
+  */
   delete[] VecMed;
   VecMed = aux;
   aux = nullptr;
@@ -158,40 +170,33 @@ Medicamentos *realocar(int &TamVetor, Medicamentos *VecMed,
 }
 
 Medicamentos *Cadastro(int &TamVetor, Medicamentos *VecMed,
-                       int &itensCadastrados) {
+                       int itensCadastrados) {
   int i = itensCadastrados;
   cout << "------------------------------------------------" << endl;
   cout << "Digite o nome do Produto: ";
 
-  string NomeMed;
   cin.ignore();
-  getline(cin, NomeMed);
-  VecMed[i].NomeMedicamento = NomeMed;
+  cin >> VecMed[i].NomeMedicamento;
 
   cout << "Digite uma descrição do Produto: ";
-  string Description;
-  getline(cin, Description);
-  VecMed[i].Descricao = Description;
+  cin.ignore();
+  cin >> VecMed[i].Descricao;
 
   cout << "Digite o Laborátorio que criou o produto: ";
-  string Labor;
-  getline(cin, Labor);
-  VecMed[i].Laboratorio = Labor;
+  cin.ignore();
+  cin >> VecMed[i].Laboratorio;
 
   cout << "Digite o código de identificação do produto: ";
-  string CodInd;
-  getline(cin, CodInd);
-  VecMed[i].CodigoIndentificacao = CodInd;
+  cin.ignore();
+  cin >> VecMed[i].CodigoIndentificacao;
 
   cout << "Digite o tamanho do estoque deste produto: ";
-  int EstoqueDisponivel;
-  cin >> EstoqueDisponivel;
-  VecMed[i].QuantidadeDisponivel = EstoqueDisponivel;
+  cin.ignore();
+  cin >> VecMed[i].QuantidadeDisponivel;
 
   cout << "Digite o preço Unitário do produto: ";
-  float PrecoUnitario;
-  cin >> PrecoUnitario;
-  VecMed[i].PrecoUnitario = PrecoUnitario;
+  cin.ignore();
+  cin >> VecMed[i].PrecoUnitario;
 
   cout << "Digite o status do produto: ";
   string StatusProduto;
@@ -248,7 +253,7 @@ void Listar(int &TamVetor, Medicamentos *VecMed, int &itensCadastrados) {
   }
 }
 
-//função do menu principal
+// função do menu principal
 void Menu(int &TamVetor, Medicamentos *VecMed, int &itensCadastrados) {
   int Option = 0;
   while (Option != 8) {
@@ -272,6 +277,9 @@ void Menu(int &TamVetor, Medicamentos *VecMed, int &itensCadastrados) {
       break;
     case 4:
       excluir(VecMed, itensCadastrados);
+      break;
+    case 7:
+      exportar(VecMed, TamVetor, itensCadastrados);
       break;
     }
   }
