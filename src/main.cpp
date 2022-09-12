@@ -7,14 +7,13 @@ Nome do Aluno: Luís Gustavo Morais Cardoso ---------- Matricula: 202010816
 #include <cstring>
 #include <fstream>
 #include <iostream>
-#include <string.h>
 
 using namespace std;
 
 struct Medicamentos {
   char NomeMedicamento[50];
-  char Descricao[250];
-  char Laboratorio[50];
+  char Descricao[100];
+  char Laboratorio[100];
   char CodigoIndentificacao[100];
   int QuantidadeDisponivel;
   float PrecoUnitario;
@@ -38,7 +37,7 @@ void exportar(Medicamentos *v, int TamVetor, int &quantidadeItens) {
 Funcao nula Cadastro que gera os valores para serem cadastrados no registro
 medicamentos
 */
-int particiona(Medicamentos *v, int c, int f) { // c = começo, f = fim
+int particiona(Medicamentos *v, int c, int f) {
   string pivo = v[c].CodigoIndentificacao;
   Medicamentos aux = v[c];
   int i = c + 1, j = f;
@@ -47,12 +46,12 @@ int particiona(Medicamentos *v, int c, int f) { // c = começo, f = fim
       i++;
     else if (pivo <= v[j].CodigoIndentificacao)
       j--;
-    else { // (v[i] > pivo) e (v[j] < pivo)
+    else {
       swap(v[i], v[j]);
       i++;
       j--;
     }
-  } // agora i == j+1
+  }
   v[c] = v[j];
   v[j] = aux;
   return j; // retorna posição do pivô
@@ -198,17 +197,7 @@ Medicamentos *realocar(int &TamVetor, Medicamentos *VecMed,
   Medicamentos *aux = new Medicamentos[TamVetor + 3];
 
   memcpy(aux, VecMed, sizeof(Medicamentos) * TamVetor);
-  /*
-  for (int i = 0; i < itensCadastrados; i++) {
-    aux[i].NomeMedicamento = VecMed[i].NomeMedicamento;
-    aux[i].Descricao = VecMed[i].Descricao;
-    aux[i].Laboratorio = VecMed[i].Laboratorio;
-    aux[i].CodigoIndentificacao = VecMed[i].CodigoIndentificacao;
-    aux[i].QuantidadeDisponivel = VecMed[i].QuantidadeDisponivel;
-    aux[i].PrecoUnitario = VecMed[i].PrecoUnitario;
-    aux[i].SituacaoProduto = VecMed[i].SituacaoProduto;
-  }
-  */
+
   delete[] VecMed;
   VecMed = aux;
   aux = nullptr;
@@ -220,19 +209,21 @@ Medicamentos *realocar(int &TamVetor, Medicamentos *VecMed,
 
 Medicamentos *Cadastro(int &TamVetor, Medicamentos *VecMed,
                        int &itensCadastrados) {
+  // ler direto no vetor de char
   int i = itensCadastrados;
   cout << "------------------------------------------------" << endl;
   cout << "Digite o nome do Produto: ";
-  cin.getline(VecMed[i].NomeMedicamento, 50);
-  cin.ignore();
+  string NomeProd;
+  getline(cin >> ws, NomeProd);
+  cin.ignore(' ', '\n');
 
   cout << "Digite uma descrição do Produto: ";
-  cin.getline(VecMed[i].Descricao, 250);
-  cin.ignore();
+  string DescricaoProd;
+  getline(cin, DescricaoProd);
 
   cout << "Digite o Laborátorio que criou o produto: ";
-  cin.getline(VecMed[i].Laboratorio, 50);
-  cin.ignore();
+  string LaboratorioProd;
+  getline(cin, LaboratorioProd);
 
   cout << "Digite o código de identificação do produto: ";
   string CodigoID;
@@ -240,6 +231,7 @@ Medicamentos *Cadastro(int &TamVetor, Medicamentos *VecMed,
 
   cout << "Digite o tamanho do estoque deste produto: ";
   cin >> VecMed[i].QuantidadeDisponivel;
+  cin.ignore(' ', '\n');
 
   cout << "Digite o preço Unitário do produto: ";
   cin >> VecMed[i].PrecoUnitario;
@@ -255,6 +247,9 @@ Medicamentos *Cadastro(int &TamVetor, Medicamentos *VecMed,
 
   int existe = BuscaBinaria(VecMed, 0, itensCadastrados - 1, CodigoID);
   if (existe == -1) {
+    strcpy(VecMed[i].NomeMedicamento, NomeProd.c_str());
+    strcpy(VecMed[i].Descricao, DescricaoProd.c_str());
+    strcpy(VecMed[i].Laboratorio, LaboratorioProd.c_str());
     strcpy(VecMed[i].CodigoIndentificacao, CodigoID.c_str());
     itensCadastrados++;
     cout << "Cadastro Efetuado com Sucesso!\n";
