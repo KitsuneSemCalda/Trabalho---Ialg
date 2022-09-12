@@ -7,13 +7,14 @@ Nome do Aluno: Luís Gustavo Morais Cardoso ---------- Matricula: 202010816
 #include <cstring>
 #include <fstream>
 #include <iostream>
+#include <string.h>
 
 using namespace std;
 
 struct Medicamentos {
   char NomeMedicamento[50];
-  char Descricao[100];
-  char Laboratorio[100];
+  char Descricao[250];
+  char Laboratorio[50];
   char CodigoIndentificacao[100];
   int QuantidadeDisponivel;
   float PrecoUnitario;
@@ -152,9 +153,9 @@ void excluir(Medicamentos *VecMed, int tam) {
 
 // função para vender medicamento
 void efetuarVenda(Medicamentos *VecMed, int tam) {
-  
-  int vender=0;
-	
+
+  int vender = 0;
+
   string codigoBusca;
   cout << "Digite o código do produto que deseja vender: ";
   cin >> codigoBusca;
@@ -167,24 +168,29 @@ void efetuarVenda(Medicamentos *VecMed, int tam) {
   }
 
   else if (VecMed[posicao].SituacaoProduto == true) {
-   cout << "Código do medicamento:" << " " << VecMed[posicao].CodigoIndentificacao << endl;
-   cout << "Descrição:" << " " << VecMed[posicao].Descricao << endl;
-   cout << "Quantidade em estoque:" << " " << VecMed[posicao].QuantidadeDisponivel << endl;
-   cout << "Quantos medicamentos serão vendidos?:";
-   cin>>vender;
-	 if(vender<=VecMed[posicao].QuantidadeDisponivel){
-	  VecMed[posicao].QuantidadeDisponivel-=vender;
-	  //após realizar as vendas, caso o estoque chegue a 0 o produto é automaticamente desativado
-	  cout << "Quantidade em estoque:" << " " << VecMed[posicao].QuantidadeDisponivel << endl;
-	  if(VecMed[posicao].QuantidadeDisponivel == 0){
-		  VecMed[posicao].SituacaoProduto = false;
-	  }
-	 }
-     else{
-	  cout<<"Operação inválida, sem medicamentos suficientes para concluir a venda"<<endl;
-     }
+    cout << "Código do medicamento:"
+         << " " << VecMed[posicao].CodigoIndentificacao << endl;
+    cout << "Descrição:"
+         << " " << VecMed[posicao].Descricao << endl;
+    cout << "Quantidade em estoque:"
+         << " " << VecMed[posicao].QuantidadeDisponivel << endl;
+    cout << "Quantos medicamentos serão vendidos?:";
+    cin >> vender;
+    if (vender <= VecMed[posicao].QuantidadeDisponivel) {
+      VecMed[posicao].QuantidadeDisponivel -= vender;
+      // após realizar as vendas, caso o estoque chegue a 0 o produto é
+      // automaticamente desativado
+      cout << "Quantidade em estoque:"
+           << " " << VecMed[posicao].QuantidadeDisponivel << endl;
+      if (VecMed[posicao].QuantidadeDisponivel == 0) {
+        VecMed[posicao].SituacaoProduto = false;
+      }
+    } else {
+      cout << "Operação inválida, sem medicamentos suficientes para concluir a "
+              "venda"
+           << endl;
+    }
   }
-	
 }
 
 Medicamentos *realocar(int &TamVetor, Medicamentos *VecMed,
@@ -217,29 +223,26 @@ Medicamentos *Cadastro(int &TamVetor, Medicamentos *VecMed,
   int i = itensCadastrados;
   cout << "------------------------------------------------" << endl;
   cout << "Digite o nome do Produto: ";
-  cin >> VecMed[i].NomeMedicamento;
-  cin.ignore(' ', '\n');
+  cin.getline(VecMed[i].NomeMedicamento, 50);
+  cin.ignore();
 
   cout << "Digite uma descrição do Produto: ";
-  cin >> VecMed[i].Descricao;
-  cin.ignore(' ', '\n');
+  cin.getline(VecMed[i].Descricao, 250);
+  cin.ignore();
 
   cout << "Digite o Laborátorio que criou o produto: ";
-  cin >> VecMed[i].Laboratorio;
-  cin.ignore(' ', '\n');
+  cin.getline(VecMed[i].Laboratorio, 50);
+  cin.ignore();
 
   cout << "Digite o código de identificação do produto: ";
   string CodigoID;
   cin >> CodigoID;
-  cin.ignore(' ', '\n');
 
   cout << "Digite o tamanho do estoque deste produto: ";
   cin >> VecMed[i].QuantidadeDisponivel;
-  cin.ignore(' ', '\n');
 
   cout << "Digite o preço Unitário do produto: ";
   cin >> VecMed[i].PrecoUnitario;
-  cin.ignore(' ', '\n');
 
   cout << "Digite o status do produto: ";
   string StatusProduto;
@@ -249,20 +252,19 @@ Medicamentos *Cadastro(int &TamVetor, Medicamentos *VecMed,
   } else if (StatusProduto == "Inativo") {
     VecMed[i].SituacaoProduto = false;
   }
-  
-  int existe = BuscaBinaria(VecMed, 0, itensCadastrados-1, CodigoID);
-   if(existe == -1){
-	strcpy(VecMed[i].CodigoIndentificacao, CodigoID.c_str());
+
+  int existe = BuscaBinaria(VecMed, 0, itensCadastrados - 1, CodigoID);
+  if (existe == -1) {
+    strcpy(VecMed[i].CodigoIndentificacao, CodigoID.c_str());
     itensCadastrados++;
     cout << "Cadastro Efetuado com Sucesso!\n";
     quicksort(VecMed, 0, itensCadastrados - 1);
     if (itensCadastrados == TamVetor) {
-    VecMed = realocar(TamVetor, VecMed, itensCadastrados);
+      VecMed = realocar(TamVetor, VecMed, itensCadastrados);
     }
-   }
-   else{
-    cout<<"ERRO: Produto já foi cadastrado!"<<endl;
-   }
+  } else {
+    cout << "ERRO: Produto já foi cadastrado!" << endl;
+  }
   return VecMed;
 }
 
@@ -298,29 +300,31 @@ void Listar(int &TamVetor, Medicamentos *VecMed, int &itensCadastrados) {
     cout << "------------------------------------------------" << endl;
   }
 }
-//função para listar medicamentos em estoque
-void listarDadosdoEstoque(int &TamVetor, Medicamentos *VecMed, int &itensCadastrados) {
+// função para listar medicamentos em estoque
+void listarDadosdoEstoque(int &TamVetor, Medicamentos *VecMed,
+                          int &itensCadastrados) {
   cout << "------------------------------------------------" << endl;
   for (int i = 0; i < itensCadastrados; i++) {
-	  if (VecMed[i].SituacaoProduto == true) {
-	    cout << "Produto Numero:"
-		<< " " << i << endl;
-		cout << "Nome do Medicamento:"
-		<< " " << VecMed[i].NomeMedicamento << endl
-		<< "Descrição do Medicamento:"
-		<< " " << VecMed[i].Descricao << endl;
-		cout << "Nome do Laboratório:"
-		<< " " << VecMed[i].Laboratorio << endl
-		<< "Código do Medicamento:"
-		<< " " << VecMed[i].CodigoIndentificacao << endl;
-		cout << "Quantidade Restante:"
-		<< " " << VecMed[i].QuantidadeDisponivel << endl;
-		cout << "Preço unitário:"
-		<< " " << VecMed[i].PrecoUnitario << endl;
-		cout << "Situação do Medicamento:"
-		<< " "<< "Ativo" << endl;
-	 }
-   cout << "------------------------------------------------" << endl;
+    if (VecMed[i].SituacaoProduto == true) {
+      cout << "Produto Numero:"
+           << " " << i << endl;
+      cout << "Nome do Medicamento:"
+           << " " << VecMed[i].NomeMedicamento << endl
+           << "Descrição do Medicamento:"
+           << " " << VecMed[i].Descricao << endl;
+      cout << "Nome do Laboratório:"
+           << " " << VecMed[i].Laboratorio << endl
+           << "Código do Medicamento:"
+           << " " << VecMed[i].CodigoIndentificacao << endl;
+      cout << "Quantidade Restante:"
+           << " " << VecMed[i].QuantidadeDisponivel << endl;
+      cout << "Preço unitário:"
+           << " " << VecMed[i].PrecoUnitario << endl;
+      cout << "Situação do Medicamento:"
+           << " "
+           << "Ativo" << endl;
+    }
+    cout << "------------------------------------------------" << endl;
   }
 }
 
