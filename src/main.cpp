@@ -152,9 +152,15 @@ void excluir(Medicamentos *VecMed, int tam) {
 
 // função para vender medicamento
 void efetuarVenda(Medicamentos *VecMed, int tam) {
+<<<<<<< HEAD
 
   int vender = 0;
 
+=======
+  
+  int vender=0;
+	
+>>>>>>> refs/remotes/origin/master
   string codigoBusca;
   cout << "Digite o código do produto que deseja vender: ";
   cin >> codigoBusca;
@@ -167,6 +173,7 @@ void efetuarVenda(Medicamentos *VecMed, int tam) {
   }
 
   else if (VecMed[posicao].SituacaoProduto == true) {
+<<<<<<< HEAD
     cout << "Código do medicamento:"
          << " " << VecMed[posicao].CodigoIndentificacao << endl;
     cout << "Descrição:"
@@ -188,6 +195,25 @@ void efetuarVenda(Medicamentos *VecMed, int tam) {
            << endl;
     }
   }
+=======
+   cout << "Código do medicamento:" << " " << VecMed[posicao].CodigoIndentificacao << endl;
+   cout << "Descrição:" << " " << VecMed[posicao].Descricao << endl;
+   cout << "Quantidade em estoque:" << " " << VecMed[posicao].QuantidadeDisponivel << endl;
+   cout << "Quantos medicamentos serão vendidos?:";
+   cin>>vender;
+	 if(vender<=VecMed[posicao].QuantidadeDisponivel){
+	  VecMed[posicao].QuantidadeDisponivel-=vender;
+	  cout << "Quantidade em estoque:" << " " << VecMed[posicao].QuantidadeDisponivel << endl;
+	  if(VecMed[posicao].QuantidadeDisponivel == 0){
+		  VecMed[posicao].SituacaoProduto = false;
+	  }
+	 }
+     else{
+	  cout<<"Operação inválida, sem medicamentos suficientes para concluir a venda"<<endl;
+     }
+  }
+	
+>>>>>>> refs/remotes/origin/master
 }
 
 Medicamentos *realocar(int &TamVetor, Medicamentos *VecMed,
@@ -252,19 +278,35 @@ Medicamentos *Cadastro(int &TamVetor, Medicamentos *VecMed,
   } else if (StatusProduto == "Inativo") {
     VecMed[i].SituacaoProduto = false;
   }
+<<<<<<< HEAD
 
   int existe = BuscaBinaria(VecMed, 0, itensCadastrados - 1, CodigoID);
   if (existe == -1) {
     strcpy(VecMed[i].CodigoIndentificacao, CodigoID.c_str());
+=======
+  
+  int existe = BuscaBinaria(VecMed, 0, itensCadastrados-1, CodigoID);
+   if(existe == -1){
+	strcpy(VecMed[i].CodigoIndentificacao, CodigoID.c_str());
+>>>>>>> refs/remotes/origin/master
     itensCadastrados++;
     cout << "Cadastro Efetuado com Sucesso!\n";
     quicksort(VecMed, 0, itensCadastrados - 1);
     if (itensCadastrados == TamVetor) {
+<<<<<<< HEAD
       VecMed = realocar(TamVetor, VecMed, itensCadastrados);
     }
   } else {
     cout << "ERRO: Produto já foi cadastrado!" << endl;
   }
+=======
+    VecMed = realocar(TamVetor, VecMed, itensCadastrados);
+    }
+   }
+   else{
+    cout<<"ERRO: Produto já foi cadastrado!"<<endl;
+   }
+>>>>>>> refs/remotes/origin/master
   return VecMed;
 }
 
@@ -300,6 +342,7 @@ void Listar(int &TamVetor, Medicamentos *VecMed, int &itensCadastrados) {
     cout << "------------------------------------------------" << endl;
   }
 }
+<<<<<<< HEAD
 // função para listar medicamentos em estoque
 void listarDadosdoEstoque(int &TamVetor, Medicamentos *VecMed,
                           int &itensCadastrados) {
@@ -324,6 +367,30 @@ void listarDadosdoEstoque(int &TamVetor, Medicamentos *VecMed,
            << " "
            << "Ativo" << endl;
     }
+=======
+//função para listar medicamentos em estoque
+void listarDadosdoEstoque(int &TamVetor, Medicamentos *VecMed, int &itensCadastrados) {
+  cout << "------------------------------------------------" << endl;
+  for (int i = 0; i < itensCadastrados; i++) {
+	  if (VecMed[i].SituacaoProduto == true) {
+	    cout << "Produto Numero:"
+		<< " " << i << endl;
+		cout << "Nome do Medicamento:"
+		<< " " << VecMed[i].NomeMedicamento << endl
+		<< "Descrição do Medicamento:"
+		<< " " << VecMed[i].Descricao << endl;
+		cout << "Nome do Laboratório:"
+		<< " " << VecMed[i].Laboratorio << endl
+		<< "Código do Medicamento:"
+		<< " " << VecMed[i].CodigoIndentificacao << endl;
+		cout << "Quantidade Restante:"
+		<< " " << VecMed[i].QuantidadeDisponivel << endl;
+		cout << "Preço unitário:"
+		<< " " << VecMed[i].PrecoUnitario << endl;
+		cout << "Situação do Medicamento:"
+		<< " "<< "Ativo" << endl;
+	 }
+>>>>>>> refs/remotes/origin/master
   }
 }
 
