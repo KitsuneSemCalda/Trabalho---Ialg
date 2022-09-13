@@ -57,6 +57,7 @@ int particiona(Medicamentos *v, int c, int f) {
   return j; // retorna posição do pivô
 }
 
+//faz a ordenação em ordem alfabética do código
 void quicksort(Medicamentos *a, int pos_pivo, int fim) {
   int pos_novo_pivo;
   if (pos_pivo < fim) {
@@ -66,6 +67,7 @@ void quicksort(Medicamentos *a, int pos_pivo, int fim) {
   }
 }
 
+//função para realizar a busca binaria pelo código de indentificação
 int BuscaBinaria(Medicamentos *V, int pos_inicial, int pos_final, string K) {
   int meio = (pos_inicial + pos_final) / 2;
 
@@ -81,6 +83,7 @@ int BuscaBinaria(Medicamentos *V, int pos_inicial, int pos_final, string K) {
   }
 }
 
+//função para consultar o medicamento pelo código
 void Consultar(Medicamentos *VecMed, int tam) {
 
   string codigoBusca;
@@ -192,6 +195,7 @@ void efetuarVenda(Medicamentos *VecMed, int tam) {
   }
 }
 
+//faz a realocação do vetor quando o limite é atingido
 Medicamentos *realocar(int &TamVetor, Medicamentos *VecMed,
                        int itensCadastrados) {
   Medicamentos *aux = new Medicamentos[TamVetor + 3];
@@ -207,14 +211,18 @@ Medicamentos *realocar(int &TamVetor, Medicamentos *VecMed,
   return VecMed;
 }
 
+//o magnum opus, a parte principal que realiza o cadastro de cada medicamento
 Medicamentos *Cadastro(int &TamVetor, Medicamentos *VecMed,
                        int &itensCadastrados) {
   // ler direto no vetor de char
   int i = itensCadastrados;
   cout << "------------------------------------------------" << endl;
+  //é preciso apertar enter duas vezes
+  //para que seja cadastrado corretamente o nome.
   cout << "Digite o nome do Produto: ";
   string NomeProd;
   getline(cin >> ws, NomeProd);
+  cout<< "Pressione Enter mais uma vez!" <<endl;
   cin.ignore(' ', '\n');
 
   cout << "Digite uma descrição do Produto: ";
@@ -244,7 +252,9 @@ Medicamentos *Cadastro(int &TamVetor, Medicamentos *VecMed,
   } else if (StatusProduto == "Inativo") {
     VecMed[i].SituacaoProduto = false;
   }
-
+  //faz a trasferencia de string para char, assim permitindo a exportação
+  //também realiza a função de verificar se o produto já foi cadastrado
+  //por meio do Código do Medicamento
   int existe = BuscaBinaria(VecMed, 0, itensCadastrados - 1, CodigoID);
   if (existe == -1) {
     strcpy(VecMed[i].NomeMedicamento, NomeProd.c_str());
@@ -263,7 +273,7 @@ Medicamentos *Cadastro(int &TamVetor, Medicamentos *VecMed,
   return VecMed;
 }
 
-// função pra listar medicamentos
+// função pra listar medicamentos em ordem alfabética pelos códigos
 void Listar(int &TamVetor, Medicamentos *VecMed, int &itensCadastrados) {
   cout << "------------------------------------------------" << endl;
   for (int i = 0; i < itensCadastrados; i++) {
@@ -295,7 +305,8 @@ void Listar(int &TamVetor, Medicamentos *VecMed, int &itensCadastrados) {
     cout << "------------------------------------------------" << endl;
   }
 }
-// função para listar medicamentos em estoque
+// função para listar medicamentos em estoque, quase o mesmo conceito
+//do listar padrão, apenas mostrando os produtos ativados
 void listarDadosdoEstoque(int &TamVetor, Medicamentos *VecMed,
                           int &itensCadastrados) {
   cout << "------------------------------------------------" << endl;
